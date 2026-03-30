@@ -47,17 +47,6 @@ else:
     # 음수 제거
     filtered["pred"] = filtered["pred"].clip(lower=0)
 
-    # 혼잡도
-    def congestion(x):
-        if x < 5:
-            return "🟢 원활"
-        elif x < 15:
-            return "🟡 보통"
-        else:
-            return "🔴 혼잡"
-
-    filtered["혼잡도"] = filtered["pred"].apply(congestion)
-
     # 분 단위 표시
     filtered["실제"] = filtered["waiting_time"].round(2).astype(str) + "분"
     filtered["예측"] = filtered["pred"].round(2).astype(str) + "분"
@@ -67,8 +56,9 @@ else:
 
     st.subheader(f"📊 {selected_date} / {selected_time}")
 
+    # 🔥 혼잡도 제거된 표
     st.dataframe(
-        filtered[["area", "실제", "예측", "혼잡도"]]
+        filtered[["area", "실제", "예측"]]
         .rename(columns={"area": "구역"}),
         use_container_width=True
     )
